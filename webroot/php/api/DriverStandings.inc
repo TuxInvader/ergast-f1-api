@@ -20,11 +20,11 @@ if($round) {
 }
 
 $query .= " ORDER BY r.year, ds.position LIMIT $offset, $limit";
-$result = mysql_query($query) or die('I cannot select from the database because: ' . mysql_error());
+$result = $connection->query($query) or die('I cannot select from the database because: ' . $connection->connect_error());
 
 $query = "SELECT FOUND_ROWS()";
-$found_rows_result = mysql_query($query) or die('I cannot select from the database because: ' . mysql_error());
-$row = mysql_fetch_row($found_rows_result);
+$found_rows_result = $connection->query($query) or die('I cannot select from the database because: ' . $connection->connect_error());
+$row = $found_rows_result->fetch_row();
 $total = $row[0];
 $previousYear = NULL
 
@@ -37,7 +37,7 @@ if(strcmp($format, "xml") == 0) {
   if(isset($driverStandings)) echo " driverStandings=\"$driverStandings\"";
 
   echo ">\n";
-  while($row = @mysql_fetch_array($result)) {
+  while($row = $result->fetch_array()) {
     $driverId = $row[0];
     $driverRef = $row[1];
     $permanentNumber = $row[2];
@@ -75,7 +75,7 @@ if(strcmp($format, "xml") == 0) {
     echo "\t\t\t\t</Driver>\n";
     
     $constructorResult = getConstructors($year, $round, $driverId);
-    while($constructorRow = @mysql_fetch_array($constructorResult)) {
+    while($constructorRow = $connection->fetch_array($constructorResult)) {
       $constructorRef = $constructorRow[0];
       $constr_name = $constructorRow[1];
       $constr_nationality = $constructorRow[2];
@@ -102,10 +102,10 @@ if(strcmp($format, "xml") == 0) {
   if(isset($driver)) echo "\"driverId\":\"$driver\",";
   if(isset($driverStandings)) echo "\"driverStandings\":\"$driverStandings\",";
   
-  $numRows = mysql_num_rows($result);
+  $numRows = $result->num_rows;
   echo "\"StandingsLists\":[";
   if($numRows > 0) {
-    while($row = @mysql_fetch_array($result)) {
+    while($row = $result->fetch_array()) {
       $driverId = $row[0];
       $driverRef = $row[1];
       $permanentNumber = $row[2];
@@ -153,11 +153,11 @@ if(strcmp($format, "xml") == 0) {
       echo "},";
 
       $constructorResult = getConstructors($year, $round, $driverId);
-      $numRows = mysql_num_rows($constructorResult);
+      $numRows = $constructorResult->num_rows;
       echo "              \"Constructors\":[";
       if($numRows > 0) {
         for($i=1; $i<=$numRows; $i++) {
-          $constructorRow = @mysql_fetch_array($constructorResult);
+          $constructorRow = $connection->fetch_array($constructorResult);
           $constructorRef = $constructorRow[0];
           $constr_name = $constructorRow[1];
           $constr_nationality = $constructorRow[2];
@@ -189,7 +189,7 @@ function getConstructors($year, $round, $driverId) {
   $query .= " WHERE re.raceId=ra.raceId AND re.driverId='$driverId' AND c.constructorId=re.constructorId";
   $query .= " AND ra.year='$year'"; 
   $query .= " AND ra.round<='$round'";
-  $result = mysql_query($query) or die('I cannot select from the database because: ' . mysql_error());
+  $result = $connection->query($query) or die('I cannot select from the database because: ' . $connection->connect_error());
   return $result;
 }
 ?>

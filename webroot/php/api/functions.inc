@@ -9,15 +9,15 @@ function clean($string) {
       $string = stripslashes($string);
     }
   }
-  $string = mysql_real_escape_string($string);
+  $string = mysqli_real_escape_string($string);
   return $string;
 }
 
 function currentYear() {
   $query = "SELECT MAX(races.year) FROM races, results WHERE races.raceId=results.raceId";
-  $result = mysql_query($query) or die('I cannot select from the database because: ' . mysql_error());
+  $result = $connection->query($query) or die('I cannot select from the database because: ' . $connection->connect_error());
   if($result) {
-    $row = @mysql_fetch_array($result);
+    $row = $result->fetch_array();
     $year = $row[0];
     return $year;
   }
@@ -25,9 +25,9 @@ function currentYear() {
 
 function lastRound($year) {
   $query = "SELECT MAX(races.round) FROM races, results WHERE races.year='$year' AND races.raceId=results.raceId";
-  $result = mysql_query($query) or die('I cannot select from the database because: ' . mysql_error());
+  $result = $connection->query($query) or die('I cannot select from the database because: ' . $connection->connect_error());
   if($result) {
-    $row = @mysql_fetch_array($result);
+    $row = $result->fetch_array();
     $last = $row[0];
     return $last;
   }
@@ -35,9 +35,9 @@ function lastRound($year) {
 
 function nextRound($year) {
   $query = "SELECT MAX(round) FROM races WHERE year='$year'";
-  $result = mysql_query($query) or die('I cannot select from the database because: ' . mysql_error());
+  $result = $connection->query($query) or die('I cannot select from the database because: ' . $connection->connect_error());
   if($result) {
-    $row = @mysql_fetch_array($result);
+    $row = $result->fetch_array();
     $final = $row[0];
     $last = lastRound($year);
     if($last < $final) {
