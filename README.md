@@ -1,5 +1,6 @@
 # Ergast API running on NGINX Unit
 This is a fork of the ergast-f1-api project. It has been modified to run on NGINX Unit within a single container.
+The default output format has also been changed to JSON.
 
 # ergast Local API Server
 
