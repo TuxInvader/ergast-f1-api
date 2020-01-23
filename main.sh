@@ -41,7 +41,7 @@ cat <<-EOF > /tmp/unit-php.json
   "routes": [
     {
       "match": {
-        "uri": [ "/api/f1/*" ]
+        "uri": [ "/api/*" ]
       },
       "action": {
        "pass": "applications/ergast"
