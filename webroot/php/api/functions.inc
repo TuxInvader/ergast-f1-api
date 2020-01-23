@@ -1,6 +1,6 @@
 <?php
 
-function clean($string) {
+function clean($string, $connection) {
   $string = trim($string);
   if(get_magic_quotes_gpc()) {
     if(ini_get('magic_quotes_sybase')) {
@@ -9,7 +9,7 @@ function clean($string) {
       $string = stripslashes($string);
     }
   }
-  $string = mysqli_real_escape_string($string);
+  $string = $connection->real_escape_string($string);
   return $string;
 }
 

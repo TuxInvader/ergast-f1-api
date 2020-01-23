@@ -96,7 +96,7 @@ for($i=$n; $i<$n+17; $i+=2) {
           error(400, "Bad Request");
         } else {
           if(isset($segments[$i+1])) {
-            $driver = clean($segments[$i+1]);
+            $driver = clean($segments[$i+1], $connection);
           } else { 
             break 2;
           }        
@@ -107,7 +107,7 @@ for($i=$n; $i<$n+17; $i+=2) {
           error(400, "Bad Request");
         } else {
           if($segments[$i+1]) {
-            $constructor = clean($segments[$i+1]);
+            $constructor = clean($segments[$i+1], $connection);
           } else {
             break 2;
           }        
@@ -118,7 +118,7 @@ for($i=$n; $i<$n+17; $i+=2) {
           error(400, "Bad Request");
         } else {
           if($segments[$i+1]) {
-            $circuit = clean($segments[$i+1]);
+            $circuit = clean($segments[$i+1], $connection);
           } else {
             break 2;
           }        
@@ -129,7 +129,7 @@ for($i=$n; $i<$n+17; $i+=2) {
           error(400, "Bad Request");
         } else {
           if($segments[$i+1]) {
-            $status = clean($segments[$i+1]);
+            $status = clean($segments[$i+1], $connection);
           } else {
             break 2;
           }        
